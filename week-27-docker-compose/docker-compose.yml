@@ -30,7 +30,6 @@ services:
 
   user_app:
     build:
-      network: host
       context: ./
       dockerfile: Dockerfile
 
@@ -41,3 +40,8 @@ services:
       - 3000:3000
     depends_on:
       - postgres
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/dist
