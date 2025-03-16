@@ -1,21 +1,42 @@
-version: '3.8'
+# version: "1.0"
+# services:
+#   db:
+#     image: postgres
+#     volumes:
+#       - /Users/vaishnavr/tmp/db:/var/lib/postgresql/data
+#     ports:
+#       - 54321:5432
+#     environment:
+#       POSTGRES_PASSWORD: password
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     environment:
+#       - DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres
+#     ports:
+#       - 3000:3000
+#     depends_on:
+#       - db
+
+version: "3.8"
 services:
   postgres:
     image: postgres
     ports:
-      - 5432:5432
+      - 54321:5432
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
-  
+
   user_app:
     build:
       network: host
-      context: ./ 
+      context: ./
       dockerfile: Dockerfile
-    
+
     environment:
       - DATABASE_URL=postgresql://postgres:mysecretpassword@postgres:5432/postgres
-  
+
     ports:
       - 3000:3000
     depends_on:
