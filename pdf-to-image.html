@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Image Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #fileInput {
+            margin-bottom: 10px;
+        }
+        #pdfCanvas, #outputImage {
+            border: 1px solid #ddd;
+            max-width: 100%;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        .result-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PDF to Image Converter</h1>
+    <p>Select a PDF file to convert its first page to an image.</p>
+    
+    <div class="container">
+        <div>
+            <input type="file" id="fileInput" accept="application/pdf" />
+            <button id="convertBtn">Convert First Page</button>
+        </div>
+        
+        <div class="result-container hidden" id="resultContainer">
+            <h2>Result</h2>
+            <canvas id="pdfCanvas"></canvas>
+            <h3>Converted Image:</h3>
+            <img id="outputImage" alt="Converted PDF page" />
+            <div>
+                <button id="downloadBtn">Download Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include PDF.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>
+        // Set up the worker source
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const convertBtn = document.getElementById('convertBtn');
+            const pdfCanvas = document.getElementById('pdfCanvas');
+            const outputImage = document.getElementById('outputImage');
+            const resultContainer = document.getElementById('resultContainer');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            convertBtn.addEventListener('click', async function() {
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    alert('Please select a PDF file first.');
+                    return;
+                }
+                
+                const file = fileInput.files[0];
+                
+                try {
+                    // Read the file as ArrayBuffer
+                    const arrayBuffer = await file.arrayBuffer();
+                    
+                    // Load the PDF document
+                    const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+                    const pdf = await loadingTask.promise;
+                    
+                    console.log(`PDF loaded successfully. Total pages: ${pdf.numPages}`);
+                    
+                    // Get the first page
+                    const page = await pdf.getPage(1);
+                    
+                    // Set up canvas with the right dimensions
+                    const viewport = page.getViewport({ scale: 2.0 }); // Increase scale for better quality
+                    pdfCanvas.width = viewport.width;
+                    pdfCanvas.height = viewport.height;
+                    const context = pdfCanvas.getContext('2d');
+                    
+                    // Render the PDF page to the canvas
+                    await page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    }).promise;
+                    
+                    console.log('Page rendered successfully');
+                    
+                    // Convert canvas to image
+                    const imageUrl = pdfCanvas.toDataURL('image/png');
+                    outputImage.src = imageUrl;
+                    
+                    // Show the result container
+                    resultContainer.classList.remove('hidden');
+                    
+                    // Set up download button
+                    downloadBtn.onclick = function() {
+                        const a = document.createElement('a');
+                        a.href = imageUrl;
+                        a.download = file.name.replace('.pdf', '.png');
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+                    
+                } catch (error) {
+                    console.error('Error converting PDF to image:', error);
+                    alert('Error converting PDF: ' + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

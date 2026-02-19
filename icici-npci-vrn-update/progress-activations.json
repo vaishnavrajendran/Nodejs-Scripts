@@ -1,0 +1,126 @@
+{
+  "lastProcessedIndex": 10,
+  "results": [
+    {
+      "serialNumber": "607417-042-0336441",
+      "chassisNumber": "MAT627502SLN40620",
+      "csvVehicleNumber": "",
+      "customerId": "78357039",
+      "apiVehicleNumber": "MAT627502SLN40620",
+      "customerName": "PITAMBER PITAMBER",
+      "tagAccountNumber": 40489499,
+      "status": "VRN_NOT_AVAILABLE",
+      "remarks": "Both API and CSV have chassis, no VRN available"
+    },
+    {
+      "serialNumber": "607417-035-0660999",
+      "chassisNumber": "MAT634132SPKE1865",
+      "csvVehicleNumber": "MP22ZH8002",
+      "customerId": "78233783",
+      "apiVehicleNumber": "MP22ZH8002",
+      "customerName": "AMBIKA TIWARI",
+      "tagAccountNumber": 40341296,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-042-0186816",
+      "chassisNumber": "MEXBPHPB0SG018980",
+      "csvVehicleNumber": "MH26CY1470",
+      "customerId": "78342218",
+      "apiVehicleNumber": "MH26CY1470",
+      "customerName": "VIVEK PANDIT",
+      "tagAccountNumber": 40471078,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-042-0186817",
+      "chassisNumber": "MEXKPKPCXSG049188",
+      "csvVehicleNumber": "MH22BC9024",
+      "customerId": "78344320",
+      "apiVehicleNumber": "MH22BC9024",
+      "customerName": "YASHODEEP WANKHEDE",
+      "tagAccountNumber": 40473672,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-035-0870215",
+      "chassisNumber": "MEXJ25CW1TT011496",
+      "csvVehicleNumber": "PB08FW4836",
+      "customerId": "78298298",
+      "apiVehicleNumber": "PB08FW4836",
+      "customerName": "SURAJ PARKASH",
+      "tagAccountNumber": 40424411,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-035-0974416",
+      "chassisNumber": "MZBGB814LSN261145",
+      "csvVehicleNumber": "BR01JT9555",
+      "customerId": "78305987",
+      "apiVehicleNumber": "BR01JT9555",
+      "customerName": "CHANDAN KUMAR",
+      "tagAccountNumber": 40432350,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-036-0150446",
+      "chassisNumber": "MA3JDT08BSKF38251",
+      "csvVehicleNumber": "WB18AQ1017",
+      "customerId": "78239574",
+      "apiVehicleNumber": "WB18AQ1017",
+      "customerName": "SOURAV DATTA",
+      "tagAccountNumber": 40347945,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-037-0933616",
+      "chassisNumber": "MAT627511SAH82260",
+      "csvVehicleNumber": "GJ06RD9575",
+      "customerId": "78224155",
+      "apiVehicleNumber": "GJ06RD9575",
+      "customerName": "SUNIL ROY",
+      "tagAccountNumber": 40331131,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-038-0506971",
+      "chassisNumber": "MCAPJ8BYXSFA15164",
+      "csvVehicleNumber": "25BH4718R",
+      "customerId": "78328364",
+      "apiVehicleNumber": "25BH4718R",
+      "customerName": "RAMACHANDRA LELLA",
+      "tagAccountNumber": 40455036,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-038-0690354",
+      "chassisNumber": "MBHKWD13SSK694585",
+      "csvVehicleNumber": "UP55AY4214",
+      "customerId": "78276231",
+      "apiVehicleNumber": "UP55AY4214",
+      "customerName": "MOHAMMAD KHAN",
+      "tagAccountNumber": 40403315,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    },
+    {
+      "serialNumber": "607417-038-0693002",
+      "chassisNumber": "MAT559060SZK29898",
+      "csvVehicleNumber": "TN48CY8438",
+      "customerId": "78226438",
+      "apiVehicleNumber": "TN48CY8438",
+      "customerName": "AYYANAR AYYANAR",
+      "tagAccountNumber": 40333582,
+      "status": "VRN_MATCHED",
+      "remarks": "VRN is same in both API and CSV"
+    }
+  ]
+}

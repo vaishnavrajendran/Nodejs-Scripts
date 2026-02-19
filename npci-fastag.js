@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const cheerio = require("cheerio");
-const Captcha2Solver = require("./2captcha");
+const Captcha2Solver = require("./captcha2solver");
 
 class NPCIFastTagChecker {
   constructor(captchaApiKey = "648899d68e84b24d1859cea2ce23def9") {
@@ -263,31 +263,18 @@ async function main() {
     output: process.stdout,
   });
 
-  // First get the vehicle number from user input
   readline.question(
     "Enter vehicle registration number (e.g., KA12AB1234): ",
     async (vehicleNumber) => {
-      if (!vehicleNumber || vehicleNumber.trim() === "") {
-        console.log("Vehicle number is required");
-        readline.close();
-        return;
-      }
+      const checker = new NPCIFastTagChecker();
+      const result = await checker.processVehicle(
+        vehicleNumber.trim().toUpperCase()
+      );
 
-      try {
-        vehicleNumber = "KA05NE5157";
-        console.log(`Processing vehicle number: ${vehicleNumber}`);
+      console.log("\nFastTag Status Result:");
+      console.log(JSON.stringify(result, null, 2));
 
-        // Initialize the checker after getting user input
-        const checker = new NPCIFastTagChecker();
-        const result = await checker.processVehicle(vehicleNumber);
-
-        console.log("\nFastTag Status Result:");
-        console.log(JSON.stringify(result, null, 2));
-      } catch (error) {
-        console.error("Error processing request:", error.message);
-      } finally {
-        readline.close();
-      }
+      readline.close();
     }
   );
 }

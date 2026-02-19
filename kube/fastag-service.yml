@@ -1,0 +1,144 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastag
+  namespace: fastag
+  labels:
+    app: fastag
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fastag
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fastag
+    spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: fastag
+          image: 000343552859.dkr.ecr.ap-south-1.amazonaws.com/fastag-service:fff4ef7
+          ports:
+            - containerPort: 8888
+          readinessProbe:
+            httpGet:
+              path: /fastag-service/api/v1/health/ready
+              port: 8888
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /fastag-service/api/v1/health
+              port: 8888
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 30"]
+          securityContext:
+            privileged: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+            allowPrivilegeEscalation: false
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "80m"
+            limits:
+              memory: "2048Mi"
+              cpu: "1024m"
+          envFrom:
+            - configMapRef:
+                name: fastag-service-config
+      terminationGracePeriodSeconds: 40
+      serviceAccount: fastag-service-account
+      serviceAccountName: fastag-service-account
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fastag
+  namespace: fastag
+  annotations:
+    # kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/load-balancer-name: "production-eks-alb"
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=120
+    # alb.ingress.kubernetes.io/load-balancer-attributes: deletion_protection.enabled=true,routing.http2.enabled=true
+    alb.ingress.kubernetes.io/healthcheck-path: "/fastag-service/api/v1/health"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:000343552859:certificate/bb138f18-04ed-430d-af5c-18f7578faf62
+    alb.ingress.kubernetes.io/group.name: "fastag-group"
+    alb.ingress.kubernetes.io/group.order: "10"
+    alb.ingress.kubernetes.io/actions.response-404: >
+      {"type":"fixed-response","fixedResponseConfig":{"contentType":"text/plain","messageBody":"Invalid Route!","statusCode":"404"}}
+spec:
+  ingressClassName: internet-facing-class
+  rules:
+    - host: "api.highwaydelite.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/fastag-service/"
+            backend:
+              service:
+                name: fastag
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: response-404
+                port:
+                  name: use-annotation
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastag
+  namespace: fastag
+  labels:
+    app: fastag
+spec:
+  ports:
+    - port: 80
+      targetPort: 8888
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: fastag
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fastag
+  namespace: fastag
+spec:
+  maxReplicas: 10
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: fastag
+  targetCPUUtilizationPercentage: 75
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: fastag-service-pdb
+  namespace: fastag
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fastag
+
+
